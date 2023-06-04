@@ -1,24 +1,71 @@
-import { Component, onMount } from "solid-js";
+import { Component, Show, createSignal } from "solid-js";
+import { Motion, Presence } from "@motionone/solid";
 
 const Desktop: Component<{}> = (props) => {
-  console.log("Desktop");
-  let ref: HTMLElement | null = null;
-  onMount(() => {
-    console.log("App", ref);
-  });
+  const [state, setState] = createSignal<"booting" | "input" | "done">("input");
+  const [name, setName] = createSignal("");
+  const [isAnimating, setIsAnimating] = createSignal(false);
+
   return (
-    <main ref={ref!} style={{ background: "red" }}>
-      <h1>Desktop</h1>
-      <button
-        onClick={() =>
-          document.fullscreenElement
-            ? document.exitFullscreen()
-            : ref!.requestFullscreen()
-        }
-      >
-        Go FullScreen
-      </button>
-    </main>
+    <Motion.main
+      style={{
+        background: "black",
+        color: "whitesmoke",
+        display: "grid",
+        "place-items": "center",
+      }}
+      animate={{
+        background: state() === "done" ? "white" : "black",
+        color: state() === "done" ? "black" : "whitesmoke",
+      }}
+    >
+      <Show when={state() === "booting"}>
+        <Motion.div style={{ display: "grid", "place-items": "center" }}>
+          <Motion.h1
+            animate={{ opacity: [0, 1] }}
+            transition={{
+              duration: 1,
+              easing: "ease-in-out",
+              repeat: 4,
+              // @ts-ignore
+              direction: "alternate",
+            }}
+            onMotionComplete={() => setState("input")}
+          >
+            Booting
+          </Motion.h1>
+        </Motion.div>
+      </Show>
+
+      <Show when={state() === "input"}>
+        <Motion.div animate={{ opacity: [0, 1] }}>
+          <h1>Enter Your Name</h1>
+          <Motion.input
+            type="text"
+            value={name()}
+            onInput={(e) => setName(e.currentTarget.value)}
+            autofocus
+            animate={isAnimating() ? { y: [5, -5, 0] } : {}}
+            onMotionComplete={() => setIsAnimating(false)}
+          />
+          <button
+            onClick={() => {
+              if (name() === "") setIsAnimating(true);
+              else setState("done");
+            }}
+          >
+            Done
+          </button>
+        </Motion.div>
+      </Show>
+
+      <Show when={state() === "done"}>
+        <Motion.div animate={{ opacity: [0, 1] }}>
+          <h1>Welcome {name()}, to The New World</h1>
+          <button onClick={() => setState("booting")}>Reboot</button>
+        </Motion.div>
+      </Show>
+    </Motion.main>
   );
 };
 
