@@ -1,5 +1,4 @@
-import { Component, Show, createSignal, lazy, onMount } from "solid-js";
-import styles from "./App.module.css";
+import { Component, lazy } from "solid-js";
 
 let touch = false;
 
@@ -11,9 +10,9 @@ if ("maxTouchPoints" in navigator) {
 let RenderedComponent: Component;
 
 if (touch) {
-  RenderedComponent = lazy(() => import("./Touch.tsx"));
+  RenderedComponent = lazy(() => import("./touch/Touch.tsx"));
 } else {
-  RenderedComponent = lazy(() => import("./Desktop.tsx"));
+  RenderedComponent = lazy(() => import("./desktop/Desktop.tsx"));
 }
 
 const App: Component = () => {
