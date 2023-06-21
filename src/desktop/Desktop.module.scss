@@ -1,12 +1,12 @@
 @font-face {
-  font-family: "eight_eight_zero_one";
+  font-family: "pixel";
   font-style: normal;
   font-weight: 400;
   src: url("/8801.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: "nine_eight_zero_one";
+  font-family: "less pixel";
   font-style: normal;
   font-weight: 400;
   src: url("/9801.ttf") format("truetype");
@@ -14,7 +14,7 @@
 
 .desktop {
   font-size: x-large;
-  font-family: "nine_eight_zero_one", sans-serif;
+  font-family: "less pixel", sans-serif;
   background: black;
   color: whitesmoke;
   display: grid;

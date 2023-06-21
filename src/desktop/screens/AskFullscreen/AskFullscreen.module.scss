@@ -1,0 +1,41 @@
+.wrapper {
+  display: grid;
+  place-items: center;
+  gap: 1rem;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+  button {
+    color: white;
+    border: 1px solid white;
+    text-align: center;
+    height: 2.5rem;
+    transition: all 200ms ease-out;
+    &:first-of-type {
+      &::after {
+        content: "Go Fullscreen";
+      }
+      &:hover::after {
+        content: "Good Choice";
+      }
+    }
+    &:not(:first-of-type) {
+      &::after {
+        content: "Skip";
+      }
+      &:hover::after {
+        content: "😢";
+      }
+    }
+    &:hover {
+      background-color: white;
+      color: black;
+      cursor: pointer;
+    }
+  }
+}

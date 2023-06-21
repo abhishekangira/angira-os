@@ -2,7 +2,7 @@ import { Motion } from "@motionone/solid";
 import { Component } from "solid-js";
 
 const Booting: Component<{
-  setState: (state: "askFullscreen" | "booting" | "input" | "done") => void;
+  onBootComplete: () => void;
 }> = (props) => {
   return (
     <Motion.div style={{ display: "grid", "place-items": "center" }}>
@@ -15,7 +15,7 @@ const Booting: Component<{
           // @ts-ignore
           direction: "alternate",
         }}
-        onMotionComplete={() => props.setState("input")}
+        onMotionComplete={() => props.onBootComplete()}
       >
         Booting
       </Motion.h1>

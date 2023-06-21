@@ -1,37 +1,73 @@
 import { Component, Show, createSignal } from "solid-js";
-import { Motion, Presence } from "@motionone/solid";
+import { Motion } from "@motionone/solid";
 import winStart from "/winStart.mp3";
 import styles from "./Desktop.module.scss";
 import AskFullscreen from "./screens/AskFullscreen/AskFullscreen";
 import Booting from "./screens/Booting";
+import { createMachine } from "xstate";
+import { useMachine } from "@xstate/solid";
+
+const desktopMachine = createMachine({
+  id: "desktop",
+  initial: "askFullscreen",
+  states: {
+    askFullscreen: {
+      on: {
+        DONE: "booting",
+      },
+    },
+    booting: {
+      on: {
+        BOOT_COMPLETE: "input",
+      },
+    },
+    input: {
+      on: {
+        DONE: "done",
+      },
+    },
+    done: {
+      on: {
+        REBOOT: [
+          {
+            target: "booting",
+            cond: (context, event) => event.fullscreen,
+          },
+          {
+            target: "askFullscreen",
+            cond: (context, event) => !event.fullscreen,
+          },
+        ],
+      },
+    },
+  },
+});
 
 const Desktop: Component<{}> = (props) => {
-  const [state, setState] = createSignal<
-    "askFullscreen" | "booting" | "input" | "done"
-  >("askFullscreen");
+  const [state, send] = useMachine(desktopMachine);
   const [name, setName] = createSignal("");
   const [isAnimating, setIsAnimating] = createSignal(false);
 
   return (
     <Motion.main
       animate={{
-        background: state() === "done" ? "white" : "black",
-        color: state() === "done" ? "black" : "whitesmoke",
+        background: state.matches("done") ? "white" : "black",
+        color: state.matches("done") ? "black" : "whitesmoke",
       }}
       transition={{
-        duration: 2,
+        duration: 1,
         easing: "ease-in-out",
       }}
       class={styles.desktop}
     >
-      <Show when={state() === "askFullscreen"}>
-        <AskFullscreen setState={setState} />
+      <Show when={state.matches("askFullscreen")}>
+        <AskFullscreen onClick={() => send("DONE")} />
       </Show>
-      <Show when={state() === "booting"}>
-        <Booting setState={setState} />
+      <Show when={state.matches("booting")}>
+        <Booting onBootComplete={() => send("BOOT_COMPLETE")} />
       </Show>
 
-      <Show when={state() === "input"}>
+      <Show when={state.matches("input")}>
         <Motion.div animate={{ opacity: [0, 1] }}>
           <h1>Enter Your Name</h1>
           <Motion.input
@@ -46,7 +82,7 @@ const Desktop: Component<{}> = (props) => {
             onClick={() => {
               if (name() === "") setIsAnimating(true);
               else {
-                setState("done");
+                send("DONE");
                 const audio = new Audio(winStart);
                 audio.play();
               }
@@ -57,14 +93,13 @@ const Desktop: Component<{}> = (props) => {
         </Motion.div>
       </Show>
 
-      <Show when={state() === "done"}>
+      <Show when={state.matches("done")}>
         <Motion.div animate={{ opacity: [0, 1] }}>
           <h1>Welcome {name()}, to The New World</h1>
           <button
-            onClick={() => {
-              if (document.fullscreenElement) setState("booting");
-              else setState("askFullscreen");
-            }}
+            onClick={() =>
+              send("REBOOT", { fullscreen: !!document.fullscreenElement })
+            }
           >
             Reboot
           </button>

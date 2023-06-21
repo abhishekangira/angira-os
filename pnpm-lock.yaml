@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -8,12 +8,18 @@ dependencies:
   '@motionone/solid':
     specifier: ^10.16.2
     version: 10.16.2(solid-js@1.7.6)
+  '@xstate/solid':
+    specifier: ^0.1.3
+    version: 0.1.3(solid-js@1.7.6)(xstate@4.37.2)
   animejs:
     specifier: ^3.2.1
     version: 3.2.1
   solid-js:
     specifier: ^1.7.6
     version: 1.7.6
+  xstate:
+    specifier: ^4.37.2
+    version: 4.37.2
 
 devDependencies:
   '@types/animejs':
@@ -683,6 +689,22 @@ packages:
     resolution: {integrity: sha512-kFSyjM+fLo3oE9noWEtUvF82ttN8fTrKohiEMIrSzEzEjnsCmtO0rBCUQBlSPEb2w8vfN+v4/Zo0tK21Bgmq4g==}
     dev: true
 
+  /@xstate/solid@0.1.3(solid-js@1.7.6)(xstate@4.37.2):
+    resolution: {integrity: sha512-Rp5JXD49Xj/v4OHL6WN5Wy/iqe/RSHtwj9zs583MG1AFrYYNXABMG4XdRzheC5efPl2TlqvX9FiZC4PDnoSljw==}
+    peerDependencies:
+      '@xstate/fsm': ^2.0.0
+      solid-js: ^1.6.0
+      xstate: ^4.37.0
+    peerDependenciesMeta:
+      '@xstate/fsm':
+        optional: true
+      xstate:
+        optional: true
+    dependencies:
+      solid-js: 1.7.6
+      xstate: 4.37.2
+    dev: false
+
   /animejs@3.2.1:
     resolution: {integrity: sha512-sWno3ugFryK5nhiDm/2BKeFCpZv7vzerWUcUPyAZLDhMek3+S/p418ldZJbJXo5ZUOpfm2kP2XRO4NJcULMy9A==}
     dev: false
@@ -1184,6 +1206,10 @@ packages:
     dependencies:
       vite: 4.1.1(sass@1.63.3)
     dev: true
+
+  /xstate@4.37.2:
+    resolution: {integrity: sha512-Qm337O49CRTZ3PRyRuK6b+kvI+D3JGxXIZCTul+xEsyFCVkTFDt5jixaL1nBWcUBcaTQ9um/5CRGVItPi7fveg==}
+    dev: false
 
   /yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
